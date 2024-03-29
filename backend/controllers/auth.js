@@ -4,6 +4,9 @@ const config = require("../utils/config");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { asyncHandler, verifyToken } = require("../utils/middleware");
 const logger = require("../utils/logger");
+const ejs = require("ejs");
+const path = require("path");
+const sendMail = require("../utils/sendMail");
 const { COOKIE_NAME } = require("../utils/constants");
 const { createToken } = require("../utils/helper");
 
@@ -86,7 +89,19 @@ const signUp = asyncHandler(async (req, res, next) => {
     });
     const { verificationCode, token } = createVerificationData(user);
     logger.info(verificationCode);
+    const data = { user: { name }, verificationCode };
+    const html = await ejs.renderFile(
+      path.join(__dirname, "../mails/account-verification.ejs"),
+      data
+    );
+
     try {
+      await sendMail({
+        email,
+        subject: "Activate Your Account",
+        template: html,
+        data,
+      });
 
       res.cookie(COOKIE_NAME, token, {
         path: "/",
