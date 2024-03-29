@@ -1,0 +1,146 @@
+const User = require("../models/user");
+const config = require("../utils/config");
+
+const ErrorHandler = require("../utils/ErrorHandler");
+const { asyncHandler, verifyToken } = require("../utils/middleware");
+const logger = require("../utils/logger");
+const { COOKIE_NAME } = require("../utils/constants");
+const { createToken } = require("../utils/helper");
+
+// route: POST /auth/login || User Login
+const login = asyncHandler(async (req, res, next) => {
+  try {
+    // Extract necessary data from the request body
+    const { email, password } = req.body;
+
+    if (email && password) {
+      const user = await User.findOne({ email });
+      console.log(User);
+      const isCorrectPassword =
+        user === null ? false : await user.comparePassword(password);
+
+      if (!(user && isCorrectPassword)) {
+        return next(new ErrorHandler('Invalid username or password', 400));
+      }
+      res.clearCookie(COOKIE_NAME, {
+        httpOnly: true,
+        domain: "localhost",
+        signed: true,
+        path: "/",
+      });
+      const userForToken = {
+        email: user.email,
+        id: user._id,
+      };
+
+      const token = createToken(userForToken, config.SECRET, "7d");
+
+      // Send a success message, token and the logged user as a response
+      res.cookie(COOKIE_NAME, token, {
+        path: "/",
+        domain: "localhost",
+        // days * hours * minutes * seconds * milliseconds
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        signed: true,
+      });
+      res.status(200).send({
+        success: true,
+        message:"Logged In Successfully.",
+        user: { id: user.id, email: user.email },
+      });
+    } else {
+      res.status(400).send({
+        success: false,
+        message: "Error: Missing Email or Password",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
+
+// route: POST /auth/signup || User Signup
+const signUp = asyncHandler(async (req, res, next) => {
+  try {
+    // Extract necessary data from the request body
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return next(new ErrorHandler("All fields are required", 400));
+    }
+
+    //check if email exists
+    const isEmailExist = await User.findOne({ email });
+    if (isEmailExist) {
+      return next(new ErrorHandler("Email already exist.", 400));
+    }
+
+    const user = req.body;
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: true,
+      domain: "localhost",
+      signed: true,
+      path: "/",
+    });
+    const { verificationCode, token } = createVerificationData(user);
+    logger.info(verificationCode);
+    try {
+
+      res.cookie(COOKIE_NAME, token, {
+        path: "/",
+        domain: "localhost",
+        // minutes * seconds * milliseconds
+        maxAge: 10 * 60 * 1000, //10 minutes
+
+        httpOnly: true,
+        signed: true,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: `Please check your email: ${email} to verify your account.`,
+      });
+    } catch (error) {
+      logger.error(error);
+      return next(new ErrorHandler(error.message, 400));
+    }
+  } catch (error) {
+    logger.error(error);
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+const changePassword = asyncHandler(async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  res.status(201).json({
+    success: true,
+    message: `Password changed successfully.`,
+  });
+});
+
+const verifyProfile = asyncHandler(async (req, res, next) => {
+  try {
+    // Send a success message to the client
+    res
+      .status(200)
+      .json({ success: true, message: "Account verified successfully." });
+  } catch (error) {
+    logger.error(error);
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+module.exports = {
+  login,
+  signUp,
+  verifyProfile,
+  changePassword
+};
+
+const createVerificationData = (user) => {
+  const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+  const token = createToken({ user, verificationCode }, config.SECRET, "5m");
+
+  return { verificationCode, token };
+};
