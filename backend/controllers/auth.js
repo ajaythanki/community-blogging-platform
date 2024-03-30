@@ -23,7 +23,7 @@ const login = asyncHandler(async (req, res, next) => {
         user === null ? false : await user.comparePassword(password);
 
       if (!(user && isCorrectPassword)) {
-        return next(new ErrorHandler('Invalid username or password', 400));
+        return next(new ErrorHandler("Invalid username or password", 400));
       }
       res.clearCookie(COOKIE_NAME, {
         httpOnly: true,
@@ -49,7 +49,7 @@ const login = asyncHandler(async (req, res, next) => {
       });
       res.status(200).send({
         success: true,
-        message:"Logged In Successfully.",
+        message: "Logged In Successfully.",
         user: { id: user.id, email: user.email },
       });
     } else {
@@ -129,14 +129,58 @@ const signUp = asyncHandler(async (req, res, next) => {
 
 const changePassword = asyncHandler(async (req, res, next) => {
   const { oldPassword, newPassword } = req.body;
-  res.status(201).json({
-    success: true,
-    message: `Password changed successfully.`,
-  });
+  const userId = req.decodedToken.id;
+  const user = await User.findById(userId);
+
+  const isCorrectPassword =
+    !oldPassword || !newPassword
+      ? false
+      : await user.comparePassword(oldPassword);
+
+  if (!isCorrectPassword) {
+    return next(new ErrorHandler("Invalid username or password", 400));
+  }
+
+  user.password = newPassword;
+
+  result = user.save();
+  if (result) {
+    res.status(201).json({
+      success: true,
+      message: `Password changed successfully.`,
+    });
+  } else {
+    return next(new ErrorHandler("Invalid username or password", 400));
+  }
 });
 
 const verifyProfile = asyncHandler(async (req, res, next) => {
   try {
+    // Extract the verification token and verification code from the request body
+    const { verificationCode } = req.body;
+
+    // Get the user from the database
+    const user = await User.findOne({ email: req.decodedToken.user.email });
+
+    // If the user is already verified, return an error message
+    if (user?.isVerified) {
+      return next(new ErrorHandler("User is already verified.", 400));
+    }
+
+    // Validate the verification code
+    if (
+      parseInt(req.decodedToken.verificationCode) !== parseInt(verificationCode)
+    ) {
+      return next(new ErrorHandler("Invalid verification code.", 400));
+    }
+
+    // Save the user's account with status verified
+    const newUser = new User({
+      ...req.decodedToken.user,
+      isVerified: true,
+    });
+    await newUser.save();
+
     // Send a success message to the client
     res
       .status(200)
@@ -146,11 +190,12 @@ const verifyProfile = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 module.exports = {
   login,
   signUp,
   verifyProfile,
-  changePassword
+  changePassword,
 };
 
 const createVerificationData = (user) => {
