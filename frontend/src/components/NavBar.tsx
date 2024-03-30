@@ -31,8 +31,11 @@ export default function NavBar() {
     <>
       <AppBar position="sticky">
         <Toolbar>
-          <Button LinkComponent={Link} href="/">
-            <Typography sx={{ textTransform: "capitalize", color:"white" }} variant="h4">
+          <Button component={Link} to="/">
+            <Typography
+              sx={{ textTransform: "capitalize", color: "white" }}
+              variant="h4"
+            >
               BlogApp
             </Typography>
           </Button>
@@ -43,13 +46,9 @@ export default function NavBar() {
                 value={activeLink}
                 onChange={(_, val) => setActiveLink(val)}
               >
-                <Tab label="Blogs" LinkComponent={Link} href="/blogs" />
-                <Tab label="My Blogs" LinkComponent={Link} href="/my-blogs" />
-                <Tab
-                  label="Create Blog"
-                  LinkComponent={Link}
-                  href="/create-blog"
-                />
+                <Tab label="Blogs" component={Link} to="/blogs" />
+                <Tab label="My Blogs" component={Link} to="/my-blogs" />
+                <Tab label="Create Blog" component={Link} to="/create-blog" />
               </Tabs>
             </Box>
           )}
@@ -57,16 +56,16 @@ export default function NavBar() {
             {!user && (
               <>
                 <Button
+                  component={Link}
+                  to="/login"
                   sx={{ margin: 1, color: "white" }}
-                  LinkComponent={Link}
-                  href="/login"
                 >
                   Login
                 </Button>
                 <Button
+                  component={Link}
+                  to="/signup"
                   sx={{ margin: 1, color: "white" }}
-                  LinkComponent={Link}
-                  href="/signup"
                 >
                   Register
                 </Button>
