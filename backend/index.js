@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require("cors");
 // const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
-// const blogRouter = require("./routes/blog");
+const blogRouter = require("./routes/blog");
 const mongoose = require("mongoose");
 const { isAuth, verifyToken } = require("./utils/middleware");
 const cookieParser = require("cookie-parser");
@@ -34,7 +34,7 @@ const options = {
 
 // app.use("/api/users",isAuth, verifyToken, userRouter);
 app.use("/api/auth", authRouter);
-// app.use("/api/blogs", blogRouter);
+app.use("/api/blogs", blogRouter);
 
 app.use(middleware.unknownEndpoint);
 

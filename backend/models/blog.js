@@ -16,6 +16,7 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: [true, "Blog Category is required"],
   },
+  tags: [String],
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -24,4 +25,4 @@ const blogSchema = new mongoose.Schema({
   
 });
 
-module.exports = mongoose.model("Item", blogSchema);
+module.exports = mongoose.model("Blog", blogSchema);
