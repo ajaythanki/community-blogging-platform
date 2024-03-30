@@ -50,7 +50,7 @@ const login = asyncHandler(async (req, res, next) => {
       res.status(200).send({
         success: true,
         message: "Logged In Successfully.",
-        user: { id: user.id, email: user.email },
+        user: user,
       });
     } else {
       res.status(400).send({
@@ -58,6 +58,26 @@ const login = asyncHandler(async (req, res, next) => {
         message: "Error: Missing Email or Password",
       });
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
+const logout = asyncHandler(async (req, res, next) => {
+  try {
+      
+      res.clearCookie(COOKIE_NAME, {
+        httpOnly: true,
+        domain: "localhost",
+        signed: true,
+        path: "/",
+      });
+      
+      res.status(200).send({
+        success: true,
+        message: "Logged out Successfully.",
+      });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
@@ -193,6 +213,7 @@ const verifyProfile = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   login,
+  logout,
   signUp,
   verifyProfile,
   changePassword,
