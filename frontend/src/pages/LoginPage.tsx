@@ -62,7 +62,7 @@ const LoginPage = () => {
   });
 
   if (isAuthenticated) {
-    history.back();
+    navigate("/");
   }
   useEffect(() => {
     if (isSuccess) {

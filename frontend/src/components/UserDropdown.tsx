@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent, Fragment } from "react";
+import { useState, SyntheticEvent } from "react";
 import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
 import Badge from "@mui/material/Badge";
@@ -28,8 +28,6 @@ const UserDropdown = () => {
   const dispatch = useDispatch();
   const { mutateAsync } = useLogoutMutation();
   
-  // const user = useSelector((state:any) => state?.user?.userData?.email);
-
   const {userData}:TUser = useSelector((state: any) => state.user);
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
@@ -51,7 +49,8 @@ const UserDropdown = () => {
   };
   
   return (
-    <Fragment>
+    <>
+      {userData?.username}
       <Badge
         overlap="circular"
         onClick={handleDropdownOpen}
@@ -63,10 +62,9 @@ const UserDropdown = () => {
         }}
       >
         <Avatar
-          alt={userData.username}
+          alt={userData?.username}
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
-          
         />
       </Badge>
       <Menu
@@ -102,11 +100,7 @@ const UserDropdown = () => {
             >
               <Avatar
                 alt={userData?.username}
-                // src={
-                //   authData?.userData?.profileImage
-                //     ? `${UrlHelper.imagUrlPath}${authData?.userData?.profileImage}`
-                //     : "/images/avatars/1.png"
-                // }
+                src={userData?.avatar}
                 sx={{ width: "2.5rem", height: "2.5rem" }}
               />
             </Badge>
@@ -141,16 +135,10 @@ const UserDropdown = () => {
             },
           }}
         >
-          
           Profile
         </MenuItem>
         <MenuItem
-          onClick={() =>
-            console.log("Change Password")
-            // dispatch(
-            //   handleOpenAuthModel({ open: true, type: "CHANGEPASSWORD" })
-            // )
-          }
+          onClick={() => console.log("Change Password")}
           sx={{
             py: 2,
             "& svg": {
@@ -161,7 +149,7 @@ const UserDropdown = () => {
         >
           Password
         </MenuItem>
-        
+
         <MenuItem
           onClick={handleLogout}
           sx={{
@@ -175,7 +163,7 @@ const UserDropdown = () => {
           Logout
         </MenuItem>
       </Menu>
-    </Fragment>
+    </>
   );
 };
 

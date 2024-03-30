@@ -27,6 +27,7 @@ const userSlice = createSlice({
         avatar: "",
         username: "",
       };
+      state.isAuthenticated = false;
       window.localStorage.removeItem("authUser");
     },
   },
