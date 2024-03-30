@@ -1,7 +1,9 @@
 export interface IBlogCard{
   title:string,
   description:string,
-  thumbnail:string,
+  thumbnail:{
+    url:string
+  },
   category: string,
   author:{
     _id: string,
