@@ -11,7 +11,6 @@ const Layout = ({ children }: any) => {
       <Toaster position="top-center" />
       <Container
         component="main"
-        maxWidth="xs"
         style={{ paddingTop: "2rem", minHeight: "80vh" }}
       >
         <CssBaseline />
