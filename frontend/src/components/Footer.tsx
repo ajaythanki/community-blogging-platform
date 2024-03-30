@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Footer = (props: any) => {
   return (
-    <Box component={"div"} sx={{ position: "sticky", bottom: 0 }}>
+    <Box component={"div"} sx={{ position: "sticky", bottom: 0, py:2, backgroundColor: "#fafafa" }}>
       <Typography
         variant="body2"
         color="text.secondary"
