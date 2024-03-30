@@ -33,8 +33,8 @@ export const useVerifyUserMutation = () =>
     onMutate: () => {
       toast.loading("Verifying", { id: "userverification" });
     },
-    onSuccess: (data) => {
-      toast.success(`Verified Successfully: ${data.message}`, {
+    onSuccess: () => {
+      toast.success(`Verified Successfully`, {
         id: "userverification",
       });
     },
@@ -54,8 +54,8 @@ export const useLoginMutation = () =>
     onMutate: () => {
       toast.loading("Signing In", { id: "userlogin" });
     },
-    onSuccess: (data: any) => {
-      toast.success(`Signed In Success: ${data.message}`, { id: "userlogin" });
+    onSuccess: () => {
+      toast.success(`Signed In Success:`, { id: "userlogin" });
     },
     onError: (error: any) => {
       console.log(error);
@@ -77,8 +77,8 @@ export const useLogoutMutation = () =>
     onMutate: () => {
       toast.loading("Logging Out", { id: "userlogout" });
     },
-    onSuccess: (data) => {
-      toast.success(`Logged Out Success: ${data.message}`, {
+    onSuccess: () => {
+      toast.success(`Logged Out Success`, {
         id: "userlogout",
       });
     },
