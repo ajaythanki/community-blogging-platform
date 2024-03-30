@@ -3,9 +3,9 @@ const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 const express = require("express");
 const cors = require("cors");
-const userRouter = require("./routes/users");
+// const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
-const itemRouter = require("./routes/item");
+// const blogRouter = require("./routes/blog");
 const mongoose = require("mongoose");
 const { isAuth, verifyToken } = require("./utils/middleware");
 const cookieParser = require("cookie-parser");
@@ -32,9 +32,9 @@ const options = {
   dbName: config.MONGO_DB_NAME,
 };
 
-app.use("/api/users",isAuth, verifyToken, userRouter);
+// app.use("/api/users",isAuth, verifyToken, userRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/blogs", itemRouter);
+// app.use("/api/blogs", blogRouter);
 
 app.use(middleware.unknownEndpoint);
 
