@@ -33,11 +33,16 @@ const userSchema = mongoose.Schema(
       public_id: String,
       url: String,
     },
-    
     role: {
       type: String,
       default: "user",
     },
+    blogs: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Blog",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -49,5 +54,18 @@ const userSchema = mongoose.Schema(
     },
   }
 );
+
+//hash password
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+//compare password
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);
