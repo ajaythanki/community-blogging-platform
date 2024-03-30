@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_BACKEND_URL;
+const baseURL = `${import.meta.env.VITE_BACKEND_URL}auth/`;
 const userLogin = async (credentials: unknown) => {
   const { data }: any = await axios.post(
     `${baseURL}login`,
