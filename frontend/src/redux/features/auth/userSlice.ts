@@ -1,17 +1,16 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { TUser } from "../../../types";
 
-type TUser = {
-  userData:{
-    id: "";
-    email: "";
-  }
-};
+
 
 const initialState:TUser = {
   userData: {
     id: "",
     email: "",
+    username:"",
+    avatar:"",
   },
+  isAuthenticated: false,
 };
 const userSlice = createSlice({
   name: "user",
@@ -19,12 +18,14 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state:TUser, action:PayloadAction<TUser>) => {
       state.userData = action.payload.userData;
-      
+      state.isAuthenticated = action.payload.isAuthenticated ? true : false;
     },
     clearUser: (state:TUser) => {
       state.userData = {
         id: "",
         email: "",
+        avatar: "",
+        username: "",
       };
       window.localStorage.removeItem("authUser");
     },

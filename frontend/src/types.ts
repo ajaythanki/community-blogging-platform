@@ -10,3 +10,13 @@ export interface IBlogCard{
   createdAt:string,
   _id?:string,
 }
+
+export type TUser = {
+  userData:{
+    id: string
+    email: string
+    username: string
+    avatar?: string
+  },
+  isAuthenticated: boolean
+};
