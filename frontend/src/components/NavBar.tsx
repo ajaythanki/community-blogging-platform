@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import UserDropdown from "./UserDropdown";
@@ -7,8 +7,8 @@ import { TUser } from "../types";
 
 export default function NavBar() {
 
-  const [activeLink, setActiveLink] = useState();
-
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState(location.pathname);
   
   const {isAuthenticated}:TUser = useSelector((state: any) => state.user);
 
@@ -32,9 +32,9 @@ export default function NavBar() {
                 value={activeLink}
                 onChange={(_, val) => setActiveLink(val)}
               >
-                <Tab label="Blogs" component={Link} defaultChecked={true} to="/blogs" />
-                <Tab label="My Blogs" component={Link} to="/my-blogs" />
-                <Tab label="Create Blog" component={Link} to="/create-blog" />
+                <Tab label="Blogs" component={Link} value={"/"} to="/" />
+                <Tab label="My Blogs" component={Link} value={"/my-blogs"} to="/my-blogs" />
+                <Tab label="Create Blog" component={Link} value={"/create-blog"} to="/create-blog" />
               </Tabs>
             </Box>
           )}
