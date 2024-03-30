@@ -2,14 +2,14 @@ import axios from "axios";
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 const userLogin = async (credentials: unknown) => {
-  const { data }: { data: Response } = await axios.post(
+  const { data }: any = await axios.post(
     `${baseURL}login`,
     credentials,
     {
       withCredentials: true,
     },
   );
-  return data;
+  return data as any;
 };
 const userSignup = async (credentials: unknown) => {
   const { data } = await axios.post(`${baseURL}signup`, credentials, {
@@ -18,7 +18,7 @@ const userSignup = async (credentials: unknown) => {
   return data;
 };
 const userLogout = async () => {
-  const { data } = await axios.get(`${baseURL}logout`, {
+  const { data } = await axios.post(`${baseURL}logout`, {
     withCredentials: true,
   });
   return data;
