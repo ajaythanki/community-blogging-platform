@@ -12,7 +12,7 @@ const Layout = ({ children }: any) => {
       <Container
         component="main"
         maxWidth="xs"
-        style={{ paddingTop: "5rem", minHeight: "80vh" }}
+        style={{ paddingTop: "2rem", minHeight: "80vh" }}
       >
         <CssBaseline />
         {children}
