@@ -68,9 +68,9 @@ const login = asyncHandler(async (req, res, next) => {
 const signUp = asyncHandler(async (req, res, next) => {
   try {
     // Extract necessary data from the request body
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!name || !email || !password) {
+    if (!username || !email || !password) {
       return next(new ErrorHandler("All fields are required", 400));
     }
 
@@ -89,7 +89,7 @@ const signUp = asyncHandler(async (req, res, next) => {
     });
     const { verificationCode, token } = createVerificationData(user);
     logger.info(verificationCode);
-    const data = { user: { name }, verificationCode };
+    const data = { user: { username }, verificationCode };
     const html = await ejs.renderFile(
       path.join(__dirname, "../mails/account-verification.ejs"),
       data
