@@ -1,51 +1,50 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Autocomplete, Box, Button, Container, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FileInput from "../components/FileInput";
 import { categories } from "../constants";
-import { TUser } from "../types";
+import { useCreateBlogMutation } from "../redux/features/blog/hooks/useBlog";
 const CreateBlogPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
 
   const initialValues = {
     title: "",
     description: "",
     category: "",
-    tagName: [],
+    tags: [],
     thumbnail: "",
-    author: "",
   };
 
   const validationSchema = yup.object({
     title: yup.string().required("Blog title is required"),
     description: yup.string().required("Blog Description is required"),
-    tagName: yup
+    tags: yup
       .array()
       .min(1, "Minimum one tag is required")
       .required("Tags is required"),
     category: yup.string().required("Category is required"),
-    thumbnail: yup.string().nullable(),
+    thumbnail: yup.mixed().nullable(),
   });
+
+  const { mutateAsync, isPending } = useCreateBlogMutation();
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
       // Handle form submission logic here
-      console.log("Form submitted:", values);
+        mutateAsync(values);
+        console.log("Form submitted:", values);
       // formik.resetForm();
     },
   });
 
-// const {userData}:TUser = useSelector((state:any) => state?.user);
-// userData
+  console.log("formik.values",formik.values);
+  console.log("formik.errors",formik.errors);
 
   return (
-    <Container maxWidth={"xl"} sx={{ pt: 0, minWidth: "500px" }}>
+    <Container maxWidth={"sm"} sx={{ pt: 0, minWidth: "500px" }}>
       <Box
         component={"form"}
         sx={{ width: "100%" }}
@@ -61,12 +60,7 @@ const CreateBlogPage = () => {
           Create A Blog
         </Typography>
         <Box>
-          <FileInput formik={formik}/>
-          {formik.touched.thumbnail && Boolean(formik.errors.thumbnail) && (
-                <FormHelperText sx={{ color: "#ed4a49" }}>
-                  {formik.errors.thumbnail}
-                </FormHelperText>
-              )}
+          <FileInput formik={formik} isLoading={isPending}/>
         </Box>
         <Grid container spacing={1}>
           <Grid item xs={12}>
@@ -78,6 +72,7 @@ const CreateBlogPage = () => {
               margin="normal"
               variant="outlined"
               fullWidth
+              disabled={isPending}
               error={
                 formik.touched.title && Boolean(formik.errors.title)
               }
@@ -95,6 +90,7 @@ const CreateBlogPage = () => {
               margin="normal"
               variant="outlined"
               multiline
+              disabled={isPending}
               fullWidth
               error={
                 formik.touched.description && Boolean(formik.errors.description)
@@ -110,6 +106,7 @@ const CreateBlogPage = () => {
               <Select
                 fullWidth
                 value={formik.values.category}
+                disabled={isPending}
                 id="category"
                 name="category"
                 label="Select Category"
@@ -146,27 +143,28 @@ const CreateBlogPage = () => {
             <Autocomplete
               sx={{ mb: 2 }}
               multiple
-              options={formik.values.tagName ? formik.values.tagName : []}
+              disabled={isPending}
+              options={formik.values.tags ? formik.values.tags : []}
               freeSolo
               onChange={(_, value: any) => {
                 const newVal = value.filter((item: any) =>
                   item.replace(/\s+/g, ""),
                 );
-                !/^\s/.test(value) && formik.setFieldValue("tagName", newVal);
+                !/^\s/.test(value) && formik.setFieldValue("tags", newVal);
               }}
               id="multiple-limit-tags"
-              value={formik?.values?.tagName}
+              value={formik?.values?.tags}
               renderInput={(params) => (
                 <>
                   <TextField
                     {...params}
                     label="Tags"
-                    name={"tagName"}
-                    value={formik?.values?.tagName}
+                    name={"tags"}
+                    value={formik?.values?.tags}
                     error={
-                      formik.touched.tagName && Boolean(formik.errors.tagName)
+                      formik.touched.tags && Boolean(formik.errors.tags)
                     }
-                    helperText={formik.touched.tagName && formik.errors.tagName}
+                    helperText={formik.touched.tags && formik.errors.tags}
                   />
                   <Box
                     sx={{
@@ -185,8 +183,10 @@ const CreateBlogPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" color="primary" fullWidth variant="contained">
-              SUBMIT
+            <Button type="submit" color="primary" fullWidth 
+              disabled={isPending}
+              variant="contained">
+              {isPending ? "Submiting..." : "SUBMIT"}
             </Button>
           </Grid>
         </Grid>
