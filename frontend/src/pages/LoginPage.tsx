@@ -68,7 +68,7 @@ const LoginPage = () => {
     if (isSuccess) {
       navigate("/blogs");
       dispatch(setUser({userData:data?.user,isAuthenticated:true}));
-      window.localStorage.setItem("authUser", JSON.stringify(data?.user));
+      window.localStorage.setItem("authUser", JSON.stringify({userData:data?.user,isAuthenticated:true}));
     }
   }, [isSuccess, data]);
 
