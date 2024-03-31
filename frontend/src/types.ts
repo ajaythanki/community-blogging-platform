@@ -4,6 +4,7 @@ export interface IBlogCard{
   thumbnail:{
     url:string
   },
+  tags: string[],
   category: string,
   author:{
     _id: string,
@@ -14,11 +15,13 @@ export interface IBlogCard{
 }
 
 export type TUser = {
-  userData:{
+  user:{
+    _id?: string
     id: string
     email: string
     username: string
     avatar?: string
   },
+  token:string
   isAuthenticated: boolean
 };
