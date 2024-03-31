@@ -58,43 +58,6 @@ const errorMiddleware = (err, req, res, next) => {
   // next(err);
 };
 
-// const verifyToken = asyncHandler(async (req, res, next) => {
-//   const token = req.signedCookies[`verification_token`];
-//   logger.info("token",token)
-//   const decodedToken = await jwt.verify(token, config.SECRET);
-//   // const authorization = req.get("authorization");
-//   if (decodedToken) {
-//     req.decodedToken = decodedToken;
-//     next();
-//   } else {
-//     return res
-//       .status(401)
-//       .json({
-//         success: false,
-//         message: "Unauthorized",
-//         error: "Invalid token",
-//       });
-//   }
-// });
-
-// const isAuth = asyncHandler(async (req, res, next) => {
-//   const token = req.signedCookies[`${COOKIE_NAME}`];
-//     const decodedToken = await jwt.verify(token, config.VERIFICATION_SECRET);
-//     const user = await User.findById(decodedToken.id);
-//     if (!user) {
-//       return res
-//         .status(401)
-//         .json({
-//           success: false,
-//           message: "Unauthorized",
-//           error: "Invalid token",
-//         });
-//     }
-//     req.user = user;
-//     next();  
-// });
-
-
 const isAuth = asyncHandler(async (req, res, next) => {
   const failedRes = () => {
      res

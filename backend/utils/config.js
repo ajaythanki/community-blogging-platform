@@ -17,8 +17,6 @@ const ORIGIN =
     ? process.env.ORIGIN
     : process.env.MONGODB_NAME;
 
-const SECRET = process.env.SECRET;
-const COOKIE_SECRET = process.env.COOKIE_SECRET;
 const ENCRYPTION_SECRET_KEY = process.env.ENCRYPTION_SECRET_KEY;
 
 const CLOUD_NAME = process.env.CLOUD_NAME;
@@ -36,10 +34,8 @@ module.exports = {
   MONGODB_URI,
   MONGO_DB_NAME,
   PORT,
-  SECRET,
   VERIFICATION_SECRET,
   ENCRYPTION_SECRET_KEY,
-  COOKIE_SECRET,
   ORIGIN,
   CLOUD_NAME,
   API_KEY,

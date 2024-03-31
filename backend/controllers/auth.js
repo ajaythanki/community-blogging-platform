@@ -51,13 +51,6 @@ const login = asyncHandler(async (req, res, next) => {
 // const logout = asyncHandler(async (req, res, next) => {
 //   try {
       
-//       res.clearCookie(COOKIE_NAME, {
-//         httpOnly: true,
-//         domain: "localhost",
-//         signed: true,
-//         path: "/",
-//       });
-      
 //       res.status(200).send({
 //         success: true,
 //         message: "Logged out Successfully.",
