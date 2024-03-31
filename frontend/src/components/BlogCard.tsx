@@ -78,7 +78,7 @@ export default function BlogCard({
         image={thumbnail.url}
         alt={title}
       />
-      <CardContent sx={{ textAlign: "left" }}>
+      <CardContent sx={{ textAlign: "left", px:0 }}>
         <Typography
           variant="h4"
           color="text.primary"
@@ -108,7 +108,7 @@ export default function BlogCard({
           sx={{
             display: "flex",
             flexDirection:"column",
-            alignItems: "center",
+            alignItems: "start",
           }}
         >
           <Typography sx={{ my: 1 }}>
@@ -132,7 +132,7 @@ export default function BlogCard({
           <CardHeader
             avatar={
               <Avatar
-                sx={{ bgcolor: red[500] }}
+                sx={{ bgcolor: red[500], p:0, mt:0.5 }}
                 src={author.username}
                 alt={author.username}
               ></Avatar>

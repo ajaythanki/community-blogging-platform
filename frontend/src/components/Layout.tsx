@@ -10,7 +10,7 @@ const Layout = ({ children }: any) => {
       <Toaster position="top-center" />
       <Box
         component="main"
-        style={{ padding: "2rem", minHeight: "80vh" }}
+        style={{ padding: "2rem", minHeight: "100vh" }}
       >
         <CssBaseline />
         {children}

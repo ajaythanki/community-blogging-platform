@@ -23,6 +23,9 @@ export default function NavBar() {
             </Typography>
           </Button>
           <Box display={"flex"} marginLeft="auto" alignItems={"center"}>
+            <Button component={Link} to="/" sx={{ margin: 1, color: "white" }}>
+              Home
+            </Button>
             {!isAuthenticated && (
               <>
                 <Button
@@ -40,10 +43,8 @@ export default function NavBar() {
                   Signup
                 </Button>
               </>
-                )}
-              {isAuthenticated && (
-                 <UserDropdown/>
-              )}
+            )}
+            {isAuthenticated && <UserDropdown />}
           </Box>
         </Toolbar>
       </AppBar>
