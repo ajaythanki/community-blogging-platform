@@ -1,17 +1,9 @@
 import { useState, SyntheticEvent } from "react";
-import Box from "@mui/material/Box";
-import Menu from "@mui/material/Menu";
-import Badge from "@mui/material/Badge";
-import Avatar from "@mui/material/Avatar";
-import Divider from "@mui/material/Divider";
-import MenuItem from "@mui/material/MenuItem";
-import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import { useSelector,useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { TUser } from "../types";
 import { clearUser } from "../redux/features/auth/userSlice";
-// import { useLogoutMutation } from "../redux/features/auth/hooks/useAuth";
+import { Avatar, Badge, Box, Divider, Menu, MenuItem, Typography, styled } from "@mui/material";
 
 const BadgeContentSpan = styled("span")(({ theme }) => ({
   width: 8,
@@ -28,7 +20,7 @@ const UserDropdown = () => {
   const dispatch = useDispatch();
   // const { mutateAsync } = useLogoutMutation();
   
-  const {userData}:TUser = useSelector((state: any) => state.user);
+  const {user}:TUser = useSelector((state: any) => state.user);
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget);
@@ -50,7 +42,7 @@ const UserDropdown = () => {
   
   return (
     <>
-      {userData?.username}
+      {user?.username}
       <Badge
         overlap="circular"
         onClick={handleDropdownOpen}
@@ -62,7 +54,7 @@ const UserDropdown = () => {
         }}
       >
         <Avatar
-          alt={userData?.username}
+          alt={user?.username}
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
         />
@@ -88,7 +80,7 @@ const UserDropdown = () => {
               display: "flex",
               alignItems: "center",
             }}
-            to={"/profile"}
+            to={"/my-blogs"}
           >
             <Badge
               overlap="circular"
@@ -99,8 +91,8 @@ const UserDropdown = () => {
               }}
             >
               <Avatar
-                alt={userData?.username}
-                src={userData?.avatar}
+                alt={user?.username}
+                src={user?.avatar}
                 sx={{ width: "2.5rem", height: "2.5rem" }}
               />
             </Badge>
@@ -112,21 +104,19 @@ const UserDropdown = () => {
                 flexDirection: "column",
               }}
             >
-              <Typography sx={{ fontWeight: 600 }}>
-                {userData?.username}
-              </Typography>
+              <Typography sx={{ fontWeight: 600 }}>{user?.username}</Typography>
               <Typography
                 variant="body2"
                 sx={{ fontSize: "0.8rem", color: "text.disabled" }}
               >
-                {userData?.email}
+                {user?.email}
               </Typography>
             </Box>
           </Link>
         </Box>
         <Divider sx={{ mt: "0 !important" }} />
         <MenuItem
-          onClick={() => console.log("Profile")}
+          onClick={() => handleDropdownClose("/create-blog")}
           sx={{
             py: 2,
             "& svg": {
@@ -135,10 +125,10 @@ const UserDropdown = () => {
             },
           }}
         >
-          Profile
+          Create New Blog
         </MenuItem>
         <MenuItem
-          onClick={() => console.log("Change Password")}
+          onClick={() => handleDropdownClose("/my-blogs")}
           sx={{
             py: 2,
             "& svg": {
@@ -147,7 +137,7 @@ const UserDropdown = () => {
             },
           }}
         >
-          Password
+          My Blogs
         </MenuItem>
 
         <MenuItem

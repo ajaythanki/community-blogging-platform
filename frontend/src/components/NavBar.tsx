@@ -1,14 +1,11 @@
-import { AppBar, Box, Button, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { AppBar, Box, Button,  Toolbar, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import UserDropdown from "./UserDropdown";
 import { TUser } from "../types";
 
 export default function NavBar() {
 
-  const location = useLocation();
-  const [activeLink, setActiveLink] = useState(location.pathname);
   
   const {isAuthenticated}:TUser = useSelector((state: any) => state.user);
 
@@ -25,21 +22,8 @@ export default function NavBar() {
               BlogApp
             </Typography>
           </Button>
-          {isAuthenticated && (
-            <Box display={"flex"} marginLeft="auto" marginRight={"auto"}>
-              <Tabs
-                textColor="inherit"
-                value={activeLink}
-                onChange={(_, val) => setActiveLink(val)}
-              >
-                <Tab label="Blogs" component={Link} value={"/"} to="/" />
-                <Tab label="My Blogs" component={Link} value={"/my-blogs"} to="/my-blogs" />
-                <Tab label="Create Blog" component={Link} value={"/create-blog"} to="/create-blog" />
-              </Tabs>
-            </Box>
-          )}
+          <Box display={"flex"} marginLeft="auto" alignItems={"center"}>
             {!isAuthenticated && (
-          <Box display={"flex"} marginLeft="auto">
               <>
                 <Button
                   component={Link}
@@ -53,14 +37,14 @@ export default function NavBar() {
                   to="/signup"
                   sx={{ margin: 1, color: "white" }}
                 >
-                  Register
+                  Signup
                 </Button>
               </>
+                )}
+              {isAuthenticated && (
+                 <UserDropdown/>
+              )}
           </Box>
-            )}
-            {isAuthenticated && (
-               <UserDropdown/>
-            )}
         </Toolbar>
       </AppBar>
     </>
