@@ -9,7 +9,14 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-app.use(cors({origin:config.ORIGIN, credentials: true}));
+app.use(
+  cors({
+    origin: config.ORIGIN,
+    methods: "*",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.json({limit: '50mb'}));
 
 app.use(middleware.requestLogger);
