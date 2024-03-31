@@ -14,8 +14,8 @@ const MONGO_DB_NAME =
 
 const ORIGIN =
   process.env.NODE_ENV === "development"
-    ? process.env.ORIGIN
-    : process.env.MONGODB_NAME;
+    ? process.env.TEST_ORIGIN
+    : process.env.ORIGIN;
 
 const ENCRYPTION_SECRET_KEY = process.env.ENCRYPTION_SECRET_KEY;
 
