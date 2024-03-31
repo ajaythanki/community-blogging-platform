@@ -20,12 +20,16 @@ const uploadImage = async (img, folder) => {
   }
 };
 const deleteImage = async (public_id) => {
-  const result = await cloudinary.uploader.destroy(public_id);
-  if (!result) {
-    console.log(error);
-  } else {
-    // console.log(result);
-    return result;
+  try {
+    const result = await cloudinary.uploader.destroy(public_id);
+    if (!result) {
+      console.log(error);
+    } else {
+      // console.log(result);
+      return result;
+    }
+  } catch (error) {
+    console.log(error)    
   }
 };
 
