@@ -125,7 +125,6 @@ const isAuth = asyncHandler(async (req, res, next) => {
     }
     // Add the user to the request
     req.user = user;
-    console.log("req.user====================",user)
     next();
   } catch (error) {
     return failedRes();

@@ -18,7 +18,6 @@ const login = asyncHandler(async (req, res, next) => {
 
     if (email && password) {
       const user = await User.findOne({ email });
-      console.log(user);
       const isCorrectPassword =
         user === null ? false : await user.comparePassword(password);
 

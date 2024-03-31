@@ -25,7 +25,7 @@ const deleteImage = async (public_id) => {
     if (!result) {
       console.log(error);
     } else {
-      // console.log(result);
+      console.log(result);
       return result;
     }
   } catch (error) {
