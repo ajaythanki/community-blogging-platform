@@ -3,16 +3,14 @@ const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 const express = require("express");
 const cors = require("cors");
-// const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const blogRouter = require("./routes/blog");
 const mongoose = require("mongoose");
-const { isAuth } = require("./utils/middleware");
 
 const app = express();
 
 app.use(cors({origin:config.ORIGIN, credentials: true}));
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
 
 app.use(middleware.requestLogger);
 
@@ -30,7 +28,6 @@ const options = {
   dbName: config.MONGO_DB_NAME,
 };
 
-// app.use("/api/users",isAuth, verifyToken, userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/blogs", blogRouter);
 
