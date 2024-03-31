@@ -13,9 +13,7 @@ const userLogin = async (credentials: unknown) => {
   return data as any;
 };
 const userSignup = async (credentials: unknown) => {
-  const { data } = await axios.post(`${baseURL}signup`, credentials, {
-    withCredentials: true,
-  });
+  const { data } = await axios.post(`${baseURL}signup`, credentials);
   return data;
 };
 
@@ -29,7 +27,6 @@ const userVerify = async ({
     `${baseURL}verify`,
     { verificationCode },
     {
-      withCredentials: true,
       headers: {
         Authorization: `Bearer ${token}`,
       },
