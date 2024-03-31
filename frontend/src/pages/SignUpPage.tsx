@@ -76,8 +76,7 @@ export default function SignUpPage() {
         email: email,
         password: password,
       });
-      
-      signUpFormik.resetForm();
+      if(isSignupSuccess) signUpFormik.resetForm();
     },
   });
 
@@ -97,8 +96,8 @@ export default function SignUpPage() {
         .required("Required"),
     }),
     onSubmit: async (val) => {
-      verifyMutation({ verificationCode: val.otp });
-      // navigate("/login");
+      await verifyMutation({ verificationCode: val.otp });
+      if(isVerifySuccess) navigate("/login");
     },
   });
 
