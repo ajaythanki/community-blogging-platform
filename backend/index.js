@@ -7,14 +7,12 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 const blogRouter = require("./routes/blog");
 const mongoose = require("mongoose");
-const { isAuth, verifyToken } = require("./utils/middleware");
-const cookieParser = require("cookie-parser");
+const { isAuth } = require("./utils/middleware");
 
 const app = express();
 
 app.use(cors({origin:config.ORIGIN, credentials: true}));
 app.use(express.json());
-app.use(cookieParser(config.COOKIE_SECRET))
 
 app.use(middleware.requestLogger);
 

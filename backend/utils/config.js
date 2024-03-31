@@ -19,6 +19,7 @@ const ORIGIN =
 
 const SECRET = process.env.SECRET;
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
+const ENCRYPTION_SECRET_KEY = process.env.ENCRYPTION_SECRET_KEY;
 
 const CLOUD_NAME = process.env.CLOUD_NAME;
 const API_KEY = process.env.API_KEY;
@@ -37,6 +38,7 @@ module.exports = {
   PORT,
   SECRET,
   VERIFICATION_SECRET,
+  ENCRYPTION_SECRET_KEY,
   COOKIE_SECRET,
   ORIGIN,
   CLOUD_NAME,

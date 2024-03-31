@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { setUser } from "../redux/features/auth/userSlice";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { Checkbox, FormControlLabel, IconButton, InputAdornment } from "@mui/material";
+import { Checkbox, Container, FormControlLabel, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const LoginPage = () => {
@@ -66,9 +66,11 @@ const LoginPage = () => {
   }
   useEffect(() => {
     if (isSuccess) {
+      console.log("data=======================",data);
       navigate("/blogs");
-      dispatch(setUser({userData:data?.user,isAuthenticated:true}));
-      window.localStorage.setItem("authUser", JSON.stringify({userData:data?.user,isAuthenticated:true}));
+      dispatch(setUser({userData:data?.data,isAuthenticated:true}));
+      window.localStorage.setItem("authUser", JSON.stringify({userData:data?.data,isAuthenticated:true}));
+      console.log("localstoragedataa===============>",JSON.stringify({userData:data?.data,isAuthenticated:true}));
     }
   }, [isSuccess, data]);
 
@@ -86,7 +88,7 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <Box
+    <Container maxWidth={"sm"}
       sx={{
         marginTop: 8,
         display: "flex",
@@ -177,7 +179,7 @@ const LoginPage = () => {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </Container>
   );
 };
 

@@ -22,7 +22,6 @@ const getAll = async (req, res, next) => {
 const create = async (req, res, next) => {
   const { title, description, category, thumbnail, tags } =
     req.body;
-  const author = req.decodedToken.id;
   if (
     !title ||
     !description ||
@@ -33,16 +32,20 @@ const create = async (req, res, next) => {
       new ErrorHandler("Please provide all the required fields", 400)
     );
   }
+  const author = await User.findById(req.user.id);
+  if(!author) {
+    return next(
+      new ErrorHandler("Unauthorized", 403)
+    );
+  }
   try {
-    // logger.info("working upto this", createBlog)
     const createBlog = new Blog({
       title,
       description,
       category,
-      author,
+      author:author.id,
       tags,
     });
-
 
     if(!createBlog){
       return next(new ErrorHandler("Failed to create blog", 400));
@@ -57,7 +60,7 @@ const create = async (req, res, next) => {
   
       await createBlog.save();
     }
-    req?.user?.blogs?.push(createBlog._id)
+    // req?.user?.blogs?.push(createBlog._id)
     res.status(201).json({
       success: true,
       message: `Blog Created`,

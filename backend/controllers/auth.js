@@ -2,13 +2,13 @@ const User = require("../models/user");
 const config = require("../utils/config");
 
 const ErrorHandler = require("../utils/ErrorHandler");
-const { asyncHandler, verifyToken } = require("../utils/middleware");
+const { asyncHandler } = require("../utils/middleware");
 const logger = require("../utils/logger");
 const ejs = require("ejs");
 const path = require("path");
 const sendMail = require("../utils/sendMail");
 const { COOKIE_NAME } = require("../utils/constants");
-const { createToken } = require("../utils/helper");
+const { createJwtToken } = require("../utils/helper");
 
 // route: POST /auth/login || User Login
 const login = asyncHandler(async (req, res, next) => {
@@ -18,39 +18,25 @@ const login = asyncHandler(async (req, res, next) => {
 
     if (email && password) {
       const user = await User.findOne({ email });
-      console.log(User);
+      console.log(user);
       const isCorrectPassword =
         user === null ? false : await user.comparePassword(password);
 
       if (!(user && isCorrectPassword)) {
         return next(new ErrorHandler("Invalid username or password", 400));
       }
-      res.clearCookie(COOKIE_NAME, {
-        httpOnly: true,
-        domain: "localhost",
-        signed: true,
-        path: "/",
-      });
+      
       const userForToken = {
         email: user.email,
         id: user._id,
       };
 
-      const token = createToken(userForToken, config.SECRET, "7d");
-
+      const token = createJwtToken(userForToken, "7d", config.VERIFICATION_SECRET);
       // Send a success message, token and the logged user as a response
-      res.cookie(COOKIE_NAME, token, {
-        path: "/",
-        domain: "localhost",
-        // days * hours * minutes * seconds * milliseconds
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        signed: true,
-      });
       res.status(200).send({
         success: true,
         message: "Logged In Successfully.",
-        user: user,
+        data: { user, token },
       });
     } else {
       res.status(400).send({
@@ -63,26 +49,26 @@ const login = asyncHandler(async (req, res, next) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
-const logout = asyncHandler(async (req, res, next) => {
-  try {
+// const logout = asyncHandler(async (req, res, next) => {
+//   try {
       
-      res.clearCookie(COOKIE_NAME, {
-        httpOnly: true,
-        domain: "localhost",
-        signed: true,
-        path: "/",
-      });
+//       res.clearCookie(COOKIE_NAME, {
+//         httpOnly: true,
+//         domain: "localhost",
+//         signed: true,
+//         path: "/",
+//       });
       
-      res.status(200).send({
-        success: true,
-        message: "Logged out Successfully.",
-      });
+//       res.status(200).send({
+//         success: true,
+//         message: "Logged out Successfully.",
+//       });
     
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
-  }
-});
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, error: "Internal Server Error" });
+//   }
+// });
 
 // route: POST /auth/signup || User Signup
 const signUp = asyncHandler(async (req, res, next) => {
@@ -101,12 +87,7 @@ const signUp = asyncHandler(async (req, res, next) => {
     }
 
     const user = req.body;
-    res.clearCookie(COOKIE_NAME, {
-      httpOnly: true,
-      domain: "localhost",
-      signed: true,
-      path: "/",
-    });
+    
     const { verificationCode, token } = createVerificationData(user);
     logger.info(verificationCode);
     const data = { user: { username }, verificationCode };
@@ -123,19 +104,10 @@ const signUp = asyncHandler(async (req, res, next) => {
         data,
       });
 
-      res.cookie(COOKIE_NAME, token, {
-        path: "/",
-        domain: "localhost",
-        // minutes * seconds * milliseconds
-        maxAge: 10 * 60 * 1000, //10 minutes
-
-        httpOnly: true,
-        signed: true,
-      });
-
       res.status(201).json({
         success: true,
         message: `Please check your email: ${email} to verify your account.`,
+        token
       });
     } catch (error) {
       logger.error(error);
@@ -149,7 +121,7 @@ const signUp = asyncHandler(async (req, res, next) => {
 
 const changePassword = asyncHandler(async (req, res, next) => {
   const { oldPassword, newPassword } = req.body;
-  const userId = req.decodedToken.id;
+  const userId = req.user.id;
   const user = await User.findById(userId);
 
   const isCorrectPassword =
@@ -213,7 +185,7 @@ const verifyProfile = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   login,
-  logout,
+  // logout,
   signUp,
   verifyProfile,
   changePassword,
@@ -221,7 +193,7 @@ module.exports = {
 
 const createVerificationData = (user) => {
   const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
-  const token = createToken({ user, verificationCode }, config.SECRET, "5m");
+  const token = createJwtToken({ user, verificationCode }, "5m", config.SECRET);
 
   return { verificationCode, token };
 };

@@ -11,7 +11,7 @@ import { useSelector,useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { TUser } from "../types";
 import { clearUser } from "../redux/features/auth/userSlice";
-import { useLogoutMutation } from "../redux/features/auth/hooks/useAuth";
+// import { useLogoutMutation } from "../redux/features/auth/hooks/useAuth";
 
 const BadgeContentSpan = styled("span")(({ theme }) => ({
   width: 8,
@@ -26,7 +26,7 @@ const UserDropdown = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { mutateAsync } = useLogoutMutation();
+  // const { mutateAsync } = useLogoutMutation();
   
   const {userData}:TUser = useSelector((state: any) => state.user);
 
@@ -42,7 +42,7 @@ const UserDropdown = () => {
   };
 
   const handleLogout = () => {
-    mutateAsync();
+    // mutateAsync();
     dispatch(clearUser());
     navigate("/login");
     handleDropdownClose();

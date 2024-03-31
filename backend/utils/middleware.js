@@ -4,6 +4,7 @@ const ErrorHandler = require("./ErrorHandler");
 const logger = require("./logger");
 const config = require("./config");
 const { COOKIE_NAME } = require("./constants");
+const { verifyHashToken } = require("./helper");
 
 const requestLogger = (req, res, next) => {
   logger.info("Method:", req.method);
@@ -57,47 +58,85 @@ const errorMiddleware = (err, req, res, next) => {
   // next(err);
 };
 
-const verifyToken = asyncHandler(async (req, res, next) => {
-  const token = req.signedCookies[`${COOKIE_NAME}`];
-  const decodedToken = await jwt.verify(token, config.SECRET);
-  // const authorization = req.get("authorization");
-  if (decodedToken) {
-    req.decodedToken = decodedToken;
-    next();
-  } else {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: "Unauthorized",
-        error: "Invalid token",
-      });
-  }
-});
+// const verifyToken = asyncHandler(async (req, res, next) => {
+//   const token = req.signedCookies[`verification_token`];
+//   logger.info("token",token)
+//   const decodedToken = await jwt.verify(token, config.SECRET);
+//   // const authorization = req.get("authorization");
+//   if (decodedToken) {
+//     req.decodedToken = decodedToken;
+//     next();
+//   } else {
+//     return res
+//       .status(401)
+//       .json({
+//         success: false,
+//         message: "Unauthorized",
+//         error: "Invalid token",
+//       });
+//   }
+// });
+
+// const isAuth = asyncHandler(async (req, res, next) => {
+//   const token = req.signedCookies[`${COOKIE_NAME}`];
+//     const decodedToken = await jwt.verify(token, config.VERIFICATION_SECRET);
+//     const user = await User.findById(decodedToken.id);
+//     if (!user) {
+//       return res
+//         .status(401)
+//         .json({
+//           success: false,
+//           message: "Unauthorized",
+//           error: "Invalid token",
+//         });
+//     }
+//     req.user = user;
+//     next();  
+// });
+
 
 const isAuth = asyncHandler(async (req, res, next) => {
-  const token = req.signedCookies[`${COOKIE_NAME}`];
-    const decodedToken = await jwt.verify(token, config.SECRET);
-    const user = await User.findById(decodedToken.id);
-    if (!user) {
-      return res
+  const failedRes = () => {
+     res
         .status(401)
         .json({
           success: false,
           message: "Unauthorized",
           error: "Invalid token",
         });
-    }
-    req.user = user;
-    next();  
-});
+  }
 
+  try {
+
+    if (!req.headers.authorization) {
+      return failedRes();
+  }
+
+  const [, token] = req.headers.authorization.split(" ")
+
+  if (!token) {
+      return failedRes();
+  }
+
+  const decodedJwt = jwt.verify(token, config.VERIFICATION_SECRET) 
+  const user = verifyHashToken(decodedJwt.token, process.env.ENCRYPTION_SECRET_KEY)
+    if(!user){
+      return failedRes();
+    }
+    // Add the user to the request
+    req.user = user;
+    console.log("req.user====================",user)
+    next();
+  } catch (error) {
+    return failedRes();
+  }
+});
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorMiddleware,
-  verifyToken,
+  // verifyToken,
   isAuth,
   asyncHandler,
 };
