@@ -16,7 +16,6 @@ const UserBlogPage = () => {
 
   if(isError){console.log(error);return<>Something went wrong</>;}
   if(isLoading)return<>Loading...</>;
-  console.log(user);
   return (
     <Container sx={{ pt: 2, textAlign:"center" }}>
       {data?.blogs?.length > 0 ?

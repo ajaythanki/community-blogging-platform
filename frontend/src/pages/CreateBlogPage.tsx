@@ -32,13 +32,10 @@ const CreateBlogPage = () => {
     onSubmit: async (values) => {
       // Handle form submission logic here
         mutateAsync(values);
-        // console.log("Form submitted:", values);
         formik.resetForm();
     },
   });
 
-  console.log("formik.values",formik.values);
-  console.log("formik.errors",formik.errors);
 
   return (
     <Container  sx={{ pt: 0 }}>

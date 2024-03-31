@@ -44,8 +44,7 @@ const LoginPage = () => {
     validationSchema: validationSchema,
     onSubmit: async (val) => {
       const { email, password, rememberMe } = val;
-      console.log("values", val);
-      console.log("Remember me:", rememberMe);
+
       mutateAsync({
         email: email.trim(),
         password: password.trim(),

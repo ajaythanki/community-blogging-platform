@@ -77,7 +77,6 @@ export default function SignUpPage() {
         password: password,
       });
       
-      console.log("Form submitted:", email, password, firstName, lastName);
       signUpFormik.resetForm();
     },
   });

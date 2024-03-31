@@ -35,7 +35,6 @@ const BlogPage = () => {
   useEffect(()=>{
     if (data?.blogs && data.blogs.length > 0) {
       const uniqueCategories = [...new Set(data?.blogs.map((blog:any)=>blog.category))];
-      console.log(uniqueCategories,uniqueCategories);
       setFilteredCategories([...uniqueCategories]);
       setFilteredBlogs(data?.blogs);
     }

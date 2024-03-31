@@ -10,7 +10,6 @@ const userLogin = async (credentials: unknown) => {
       Authorization: `Bearer ${userData && userData.userData?.token}`,
     },
   });
-  console.log("userData.token",userData);
   return data as any;
 };
 const userSignup = async (credentials: unknown) => {
@@ -19,19 +18,13 @@ const userSignup = async (credentials: unknown) => {
   });
   return data;
 };
-// const userLogout = async () => {
-//   const { data } = await axios.post(`${baseURL}logout`, {
-//     withCredentials: true,
-//   });
-//   return data;
-// };
+
 const userVerify = async ({
   verificationCode,
 }: {
   verificationCode: unknown;
 }) => {
   const token = JSON.parse(window.localStorage.getItem("auth_token") as string);
-  console.log("verificationCode", token);
   const { data } = await axios.post(
     `${baseURL}verify`,
     { verificationCode },

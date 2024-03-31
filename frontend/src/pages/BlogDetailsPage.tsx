@@ -36,7 +36,6 @@ const BlogDetailsPage = () => {
         ...data?.blog,
       });
       formik.setFieldValue("id", data.blog?._id);
-      console.log(data.blog);
       formik.setFieldValue("thumbnail",data.blog?.thumbnail?.url);
     }
   }, [isSuccess, data]);
@@ -68,13 +67,11 @@ const BlogDetailsPage = () => {
     onSubmit: async (values) => {
       // Handle form submission logic here
       mutateUpdateBlog({ ...values, id });
-        console.log("Form submitted:", values);
         isUpdated && formik.resetForm();
     },
   });
 
-  console.log("formik.values",formik.values);
-  // console.log("formik.errors",formik.errors);
+
 
   return (
     isSuccess && (

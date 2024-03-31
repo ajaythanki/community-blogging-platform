@@ -72,22 +72,3 @@ export const useLoginMutation = () =>
     },
   });
 
-// export const useLogoutMutation = () =>
-//   useMutation({
-//     // mutationKey: "userLogout",
-//     mutationFn: userLogout,
-//     onMutate: () => {
-//       toast.loading("Logging Out", { id: "userlogout" });
-//     },
-//     onSuccess: () => {
-//       toast.success(`Logged Out Success`, {
-//         id: "userlogout",
-//       });
-//     },
-//     onError: (error: any) => {
-//       console.log(error);
-//       toast.error(`Logging out failed : ${error?.response.data.message}`, {
-//         id: "userlogout",
-//       });
-//     },
-//   });
