@@ -13,8 +13,8 @@ const ProtectedRoute = ({ children }: any) => {
   useEffect(() => {
     if (!isAuthenticated) {
       const userData = JSON.parse(window.localStorage.getItem("authUser") as string);
-      if (userData?.email) {
-        dispatch(setUser({userData, isAuthenticated:true}));
+      if (userData) {
+        dispatch(setUser({...userData.userData, isAuthenticated:true}));
       }
     }
   }, [isAuthenticated]);

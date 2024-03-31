@@ -30,8 +30,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/blog-details/:id"
+          element={
+            <ProtectedRoute>
+              <BlogDetailsPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/blogs" element={<BlogPage />} />
-        <Route path="/blog-details/:id" element={<BlogDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
       </Routes>
