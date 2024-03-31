@@ -66,11 +66,9 @@ const LoginPage = () => {
   }
   useEffect(() => {
     if (isSuccess) {
-      console.log("data=======================",data);
       navigate("/blogs");
-      dispatch(setUser({userData:data?.data,isAuthenticated:true}));
+      dispatch(setUser({user:data?.data?.user,token:data?.data?.token,isAuthenticated:true}));
       window.localStorage.setItem("authUser", JSON.stringify({userData:data?.data,isAuthenticated:true}));
-      console.log("localstoragedataa===============>",JSON.stringify({userData:data?.data,isAuthenticated:true}));
     }
   }, [isSuccess, data]);
 
