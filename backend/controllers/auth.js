@@ -152,7 +152,7 @@ const verifyProfile = asyncHandler(async (req, res, next) => {
     const { verificationCode } = req.body;
 
     // Get the user from the database
-    const user = await User.findOne({ email: req.decodedToken.user.email });
+    const user = await User.findOne({ email: req.user.user.email });
 
     // If the user is already verified, return an error message
     if (user?.isVerified) {
@@ -161,14 +161,14 @@ const verifyProfile = asyncHandler(async (req, res, next) => {
 
     // Validate the verification code
     if (
-      parseInt(req.decodedToken.verificationCode) !== parseInt(verificationCode)
+      parseInt(req.user.verificationCode) !== parseInt(verificationCode)
     ) {
       return next(new ErrorHandler("Invalid verification code.", 400));
     }
 
     // Save the user's account with status verified
     const newUser = new User({
-      ...req.decodedToken.user,
+      ...req.user.user,
       isVerified: true,
     });
     await newUser.save();
@@ -193,7 +193,7 @@ module.exports = {
 
 const createVerificationData = (user) => {
   const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
-  const token = createJwtToken({ user, verificationCode }, "5m", config.SECRET);
+  const token = createJwtToken({ user, verificationCode }, "5m", config.VERIFICATION_SECRET);
 
   return { verificationCode, token };
 };
