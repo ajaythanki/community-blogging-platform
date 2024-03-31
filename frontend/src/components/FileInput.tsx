@@ -2,33 +2,33 @@ import { Box, Button, FormHelperText } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import fallbackImage from "../assets/default-fallback-image.png";
 
-const FileInput = ({formik, isLoading}: any) => {
+const FileInput = ({formik, isLoading, isEdit}: any) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  useEffect(() => {
+    // Set initial image URL based on existing value when editing
+    if (isEdit && formik.values.thumbnail) {
+      setImageUrl(formik.values.thumbnail);
+    }
+  }, [isEdit, formik.values.thumbnail]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if(file.size > 200 * 1024){
-        formik.setFieldError("thumbnail","File size exceeds 200KB limit");
-      }else{
+      if (file.size > 200 * 1024) {
+        formik.setFieldError("thumbnail", "File size exceeds 200KB limit");
+      } else {
         const reader = new FileReader();
         reader.onloadend = () => {
           setImageUrl(reader.result as string);
+          formik.setFieldValue("thumbnail", reader.result); // Update formik value
         };
         reader.readAsDataURL(file);
       }
     } else {
-      formik.setFieldValue("thumbnail", "");
+      setImageUrl(undefined);
+      formik.setFieldValue("thumbnail", ""); // Clear formik value if no file is selected
     }
-    
   };
-
-  useEffect(()=>{
-    // imageUrl
-    if(imageUrl) formik.setFieldValue("thumbnail", imageUrl);
-
-  },[imageUrl]);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -42,11 +42,11 @@ const FileInput = ({formik, isLoading}: any) => {
         <Box mt={2} textAlign="center">
           <img
             src={imageUrl}
-            alt={formik?.values?.thumbnail?.name}
+            alt={formik?.values?.title}
             style={{
               width: "100%",
               height: "100%",
-              maxHeight: "300px",
+              maxHeight: "350px",
               objectFit: "contain",
               cursor: "pointer",
             }}
