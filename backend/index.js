@@ -9,15 +9,8 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: config.ORIGIN,
-    methods: "*",
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
-app.use(express.json({limit: '50mb'}));
+app.use(cors());
+app.use(express.json({limit: '50mb', extended: true })); // limit is set to 50MB, and the extended option allows nested objects in the JSON body
 
 app.use(middleware.requestLogger);
 
