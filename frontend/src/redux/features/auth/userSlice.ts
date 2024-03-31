@@ -4,12 +4,13 @@ import { TUser } from "../../../types";
 
 
 const initialState:TUser = {
-  userData: {
+  user: {
     id: "",
     email: "",
     username:"",
     avatar:"",
   },
+  token:"",
   isAuthenticated: false,
 };
 const userSlice = createSlice({
@@ -17,11 +18,11 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state:TUser, action:PayloadAction<TUser>) => {
-      state.userData = action.payload.userData;
+      state.user = action.payload.user;
       state.isAuthenticated = action.payload.isAuthenticated ? true : false;
     },
     clearUser: (state:TUser) => {
-      state.userData = {
+      state.user = {
         id: "",
         email: "",
         avatar: "",

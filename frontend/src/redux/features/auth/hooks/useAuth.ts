@@ -13,6 +13,7 @@ export const useSignupMutation = () =>
     mutationFn: userSignup,
     onMutate: () => toast.loading("Signing Up", { id: "usersignup" }),
     onSuccess: (data) => {
+      window.localStorage.setItem("auth_token", JSON.stringify(data?.token));
       return toast.success(`Signed Up Successfully: ${data.message}`, {
         id: "usersignup",
       });

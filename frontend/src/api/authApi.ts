@@ -30,15 +30,15 @@ const userVerify = async ({
 }: {
   verificationCode: unknown;
 }) => {
-  const userData = JSON.parse(window.localStorage.getItem("authUser") as string);
-
+  const token = JSON.parse(window.localStorage.getItem("auth_token") as string);
+  console.log("verificationCode", token);
   const { data } = await axios.post(
     `${baseURL}verify`,
     { verificationCode },
     {
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${userData && userData.userData?.token}`,
+        Authorization: `Bearer ${token}`,
       },
     },
   );
