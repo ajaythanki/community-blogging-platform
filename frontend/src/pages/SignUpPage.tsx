@@ -7,6 +7,7 @@ import {
   Typography,
   IconButton,
   InputAdornment,
+  Container,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -78,7 +79,6 @@ export default function SignUpPage() {
       
       console.log("Form submitted:", email, password, firstName, lastName);
       signUpFormik.resetForm();
-      navigate("/login");
     },
   });
 
@@ -99,10 +99,12 @@ export default function SignUpPage() {
     }),
     onSubmit: async (val) => {
       verifyMutation({ verificationCode: val.otp });
+      // navigate("/login");
     },
   });
 
   return (
+    <Container maxWidth={"sm"}>
     <Box
       sx={{
         marginTop: 8,
@@ -318,5 +320,6 @@ export default function SignUpPage() {
         )}
       </Box>
     </Box>
+    </Container>
   );
 }
