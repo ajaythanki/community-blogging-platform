@@ -107,14 +107,14 @@ export default function BlogCard({
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection:"column",
             alignItems: "center",
           }}
         >
           <Typography sx={{ my: 1 }}>
             {Math.ceil(description.split(" ").length / 200)} min read
           </Typography>
-          <Box sx={{ display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", flexWrap:"wrap", gap: 1 }}>
             {tags.map((tag: string) => (
               <Chip size="small" label={tag} key={tag} />
             ))}
